@@ -97,32 +97,22 @@ echo.
 echo Знайдено гру: "%TARGET%"
 echo Встановлення української локалізації...
 
-set "SRC=%~dp0Bladesong\Content\Localization\Game"
-set "DST=%TARGET%\Bladesong\Content\Localization\Game"
+set "SRC_FILE=%~dp0Bladesong\Content\Localization\Game\uk\Game.locres"
+set "DST_DIR=%TARGET%\Bladesong\Content\Localization\Game"
 
-REM Zberezhennia oryhinalu dlia chystoho vydalennia
-if not exist "%DST%\en" mkdir "%DST%\en" 2>nul
-if exist "%SRC%\en\Game_en_original.locres" (
-    if not exist "%DST%\en\Game_en_original.locres" (
-        copy /y "%SRC%\en\Game_en_original.locres" "%DST%\en\Game_en_original.locres" >nul
-    )
-) else (
-    if exist "%DST%\en\Game.locres" (
-        if not exist "%DST%\en\Game_en_original.locres" (
-            copy /y "%DST%\en\Game.locres" "%DST%\en\Game_en_original.locres" >nul
-        )
-    )
-)
+REM Vstanovlennia u uk ta uk-UA
+if not exist "%DST_DIR%\uk" mkdir "%DST_DIR%\uk" 2>nul
+if not exist "%DST_DIR%\uk-UA" mkdir "%DST_DIR%\uk-UA" 2>nul
 
-REM Kopiuvannia u movni sloty
-for %%C in (en uk uk-UA ru) do (
-    if not exist "%DST%\%%C" mkdir "%DST%\%%C" 2>nul
-    if exist "%SRC%\%%C\Game.locres" (
-        fc /b "%SRC%\%%C\Game.locres" "%DST%\%%C\Game.locres" >nul 2>nul
-        if errorlevel 1 (
-            copy /y "%SRC%\%%C\Game.locres" "%DST%\%%C\Game.locres" >nul
-        )
+copy /y "%SRC_FILE%" "%DST_DIR%\uk\Game.locres" >nul
+copy /y "%SRC_FILE%" "%DST_DIR%\uk-UA\Game.locres" >nul
+
+REM Rezervna kopiia ta pidmin en dlia harantovanoi roboty
+if exist "%DST_DIR%\en\Game.locres" (
+    if not exist "%DST_DIR%\en\Game_en_backup.locres" (
+        copy /y "%DST_DIR%\en\Game.locres" "%DST_DIR%\en\Game_en_backup.locres" >nul
     )
+    copy /y "%SRC_FILE%" "%DST_DIR%\en\Game.locres" >nul
 )
 
 REM Nalashtuvannia GameUserSettings.ini

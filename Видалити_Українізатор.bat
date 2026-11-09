@@ -84,24 +84,20 @@ if not defined TARGET (
     exit /b 1
 )
 
-set "DST=%TARGET%\Bladesong\Content\Localization\Game"
-set "SRC=%~dp0Bladesong\Content\Localization\Game"
+set "DST_DIR=%TARGET%\Bladesong\Content\Localization\Game"
 
 echo Відновлення оригінальних файлів гри...
 
-REM Vidnovlennia anhliiskoho oryhinalu
-if exist "%DST%\en\Game_en_original.locres" (
-    copy /y "%DST%\en\Game_en_original.locres" "%DST%\en\Game.locres" >nul
-) else if exist "%SRC%\en\Game_en_original.locres" (
-    copy /y "%SRC%\en\Game_en_original.locres" "%DST%\en\Game.locres" >nul
-)
+REM Vydalennia ukrainskykh papok
+if exist "%DST_DIR%\uk\Game.locres" del /q "%DST_DIR%\uk\Game.locres" 2>nul
+if exist "%DST_DIR%\uk-UA\Game.locres" del /q "%DST_DIR%\uk-UA\Game.locres" 2>nul
+rd "%DST_DIR%\uk" 2>nul
+rd "%DST_DIR%\uk-UA" 2>nul
 
-REM Ochyshchennia pidminenykh ukrainskykh ta rosiiskykh failiv
-if exist "%DST%\uk\Game.locres" del /q "%DST%\uk\Game.locres" 2>nul
-if exist "%DST%\uk-UA\Game.locres" del /q "%DST%\uk-UA\Game.locres" 2>nul
-
-if exist "%DST%\en\Game_en_original.locres" (
-    if exist "%DST%\ru" copy /y "%DST%\en\Game_en_original.locres" "%DST%\ru\Game.locres" >nul
+REM Vidnovlennia en z rezervnoi kopii
+if exist "%DST_DIR%\en\Game_en_backup.locres" (
+    copy /y "%DST_DIR%\en\Game_en_backup.locres" "%DST_DIR%\en\Game.locres" >nul
+    del /q "%DST_DIR%\en\Game_en_backup.locres" 2>nul
 )
 
 REM Povernennia movy na en u GameUserSettings.ini
